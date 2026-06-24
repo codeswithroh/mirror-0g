@@ -16,10 +16,14 @@ build/
 .env.test.local
 .env.production.local
 
-# Foundry build artifacts
+# Foundry build artifacts & vendor libs
 contracts/out/
 contracts/cache/
 contracts/broadcast/
+contracts/lib/
+
+# Claude skills (local tooling, not project code)
+.claude/skills/
 
 # Misc
 .DS_Store
