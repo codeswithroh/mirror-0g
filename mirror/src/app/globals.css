@@ -1,0 +1,61 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+@import "tailwindcss";
+
+:root {
+  --font-sans: 'Inter', system-ui, sans-serif;
+  --color-dark: #1C2E1E;
+  --color-green: #4D6D47;
+  --color-light: #F1F3F1;
+  --color-muted: #5A635A;
+  --color-subtle: #738273;
+  --color-selection-bg: #EAECE9;
+  --color-selection-text: #1C2E1E;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+::selection {
+  background: var(--color-selection-bg);
+  color: var(--color-selection-text);
+}
+
+body {
+  background-color: #ffffff;
+  color: var(--color-dark);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+.animate-blink {
+  animation: blink 1s step-end infinite;
+}
+
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: #f9faf9; }
+::-webkit-scrollbar-thumb { background: #d0d8d0; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: #b0bdb0; }
+
+button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visible {
+  outline: 2px solid var(--color-green);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
