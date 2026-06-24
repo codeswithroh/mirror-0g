@@ -4,9 +4,8 @@ import { useEffect, useRef } from "react";
 
 export function BackgroundVideo() {
   const videoRef = useRef<HTMLVideoElement>(null);
+  const targetRef = useRef(0);
   const rafRef = useRef<number>(0);
-  const currentRef = useRef(0);   // where the video actually is
-  const targetRef = useRef(0);    // where the mouse wants it
 
   useEffect(() => {
     const video = videoRef.current;
@@ -16,17 +15,18 @@ export function BackgroundVideo() {
 
     function onMouseMove(e: MouseEvent) {
       if (!video || !isDesktop() || !video.duration) return;
+      // Map mouse X directly to video time — no lerp, no lag
       targetRef.current = (e.clientX / window.innerWidth) * video.duration;
     }
 
     function tick() {
-      if (video && isDesktop() && video.duration > 0) {
-        const diff = targetRef.current - currentRef.current;
-        // Only actually seek when there's a meaningful distance to cover.
-        // Factor 0.18 = fast enough to feel responsive, slow enough to glide.
-        if (Math.abs(diff) > 0.008) {
-          currentRef.current += diff * 0.18;
-          video.currentTime = currentRef.current;
+      // Only seek when browser has finished the last seek.
+      // This prevents queueing seeks faster than the decoder can process,
+      // which is what causes the choppy/laggy feeling.
+      if (video && isDesktop() && video.duration > 0 && !video.seeking) {
+        const diff = Math.abs(targetRef.current - video.currentTime);
+        if (diff > 0.005) {
+          video.currentTime = targetRef.current;
         }
       }
       rafRef.current = requestAnimationFrame(tick);
